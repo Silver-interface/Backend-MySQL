@@ -3,6 +3,7 @@ import jsonParserMiddleware from "./src/middlewares/jsonParserMiddleware.js";
 import authRoutes from "./src/routes/authRoutes.js";
 import productRotues from "./src/routes/productRoutes.js";
 import sequelize from "./src/config/sequelize.js";
+
 import User from "./src/models/userModel.js";
 import Producto from "./src/models/productModel.js"
 import Venta from "./src/models/ventaModel.js";
