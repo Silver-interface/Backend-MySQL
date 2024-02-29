@@ -1,23 +1,24 @@
-import { insertVenta, getVentas, getVentaById, updateVenta, deleteVenta } from "../services/ventaService.js";
-import { handleHttp } from "../utils/httpHandlers.js";
+import { insertVenta as insertVentaService, getVentas as getVentasService, getVentaById as getVentaByIdService, updateVenta as updateVentaService, deleteVenta as deleteVentaService } from "../services/registroVenta.services.js";
 
 const getVenta = async (req, res) => {
   try {
     const { id } = req.params;
-    const venta = await getVentaById(id);
-    const data = venta ? venta : "NOT_FOUND";
-    res.send(data);
+    const venta = await getVentaByIdService(id);
+    if (!venta) {
+      return res.status(404).json({ error: "NOT_FOUND" });
+    }
+    res.json(venta);
   } catch (error) {
-    handleHttp(res, "ERROR_GET_VENTA");
+    res.status(500).json({ error: "ERROR_GET_VENTA" });
   }
 };
 
 const getVentas = async (req, res) => {
   try {
-    const ventas = await getVentas();
-    res.send(ventas);
+    const ventas = await getVentasService();
+    res.json(ventas);
   } catch (error) {
-    handleHttp(res, "ERROR_GET_VENTAS");
+    res.status(500).json({ error: "ERROR_GET_VENTAS" });
   }
 };
 
@@ -25,30 +26,30 @@ const updateVenta = async (req, res) => {
   try {
     const { id } = req.params;
     const newData = req.body;
-    const updatedVenta = await updateVenta(id, newData);
-    res.send(updatedVenta);
+    const updatedVenta = await updateVentaService(id, newData);
+    res.json(updatedVenta);
   } catch (error) {
-    handleHttp(res, "ERROR_UPDATE_VENTA");
+    res.status(500).json({ error: "ERROR_UPDATE_VENTA" });
   }
 };
 
 const insertVenta = async (req, res) => {
   try {
     const ventaData = req.body;
-    const newVenta = await insertVenta(ventaData);
-    res.send(newVenta);
+    const newVenta = await insertVentaService(ventaData);
+    res.status(201).json(newVenta);
   } catch (error) {
-    handleHttp(res, "ERROR_INSERT_VENTA");
+    res.status(500).json({ error: "ERROR_INSERT_VENTA" });
   }
 };
 
 const deleteVenta = async (req, res) => {
   try {
     const { id } = req.params;
-    const deletedVenta = await deleteVenta(id);
-    res.send(deletedVenta);
+    const deletedVenta = await deleteVentaService(id);
+    res.json(deletedVenta);
   } catch (error) {
-    handleHttp(res, "ERROR_DELETE_VENTA");
+    res.status(500).json({ error: "ERROR_DELETE_VENTA" });
   }
 };
 

@@ -2,7 +2,10 @@ import express from "express";
 import jsonParserMiddleware from "./src/middlewares/jsonParserMiddleware.js";
 import authRoutes from "./src/routes/authRoutes.js";
 import productRotues from "./src/routes/productRoutes.js";
+import registroDetalleVentaRoutes from "./src/routes/registroDetalleVentaRoutes.js"
+import registroVentaRoutes from "./src/routes/registroVentaRoutes.js"
 import sequelize from "./src/config/sequelize.js";
+
 
 import User from "./src/models/userModel.js";
 import Producto from "./src/models/productModel.js"
@@ -15,6 +18,8 @@ app.use(jsonParserMiddleware);
 
 app.use(authRoutes);
 app.use(productRotues)
+app.use(registroDetalleVentaRoutes);
+app.use(registroVentaRoutes);
 
 sequelize.options.logging = false;
 
@@ -24,7 +29,7 @@ app.listen(port, () => {
 });
 
 sequelize
-  .sync({ force: true })
+  .sync({ force: false })
   .then(() => {
     console.log("Base de datos y modelos sincronizados");
   })

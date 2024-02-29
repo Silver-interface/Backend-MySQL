@@ -1,9 +1,8 @@
 import DetalleVenta from "../models/detalleVentaModel.js"
-import insertVenta from "./registroVenta.services.js"
 import {getCantidadProductoById, updateProducto} from "./product.services.js"
 
 
-const getCantidadProductoById = async (detalleVenta) => {
+const getCantidadProductoByIda = async (detalleVenta) => {
 	try {
     const cantidadProducto = await getCantidadProductoById(detalleVenta.ID_PRODUCTO);
     return cantidadProducto;
@@ -13,14 +12,16 @@ const getCantidadProductoById = async (detalleVenta) => {
 }
 
 const restarCantidadProducto = async (detalleVenta)=>{
+  
 	try {
+    const actualizarCantidad = 0;
     const cantidadProducto = await getCantidadProductoById(detalleVenta.ID_PRODUCTO);
     if (cantidadProducto <= 0) {
       throw new Error("No se puede restar una cantidad menor o igual a 0");
     }else{
 			if (cantidadProducto>=detalleVenta.CANTIDAD)
 			{
-        const actualizarCantidad = cantidadProducto - detalleVenta.CANTIDAD
+        actualizarCantidad = cantidadProducto - detalleVenta.CANTIDAD
 				const producto = {
 					ID_PRODUCTO:detalleVenta.ID_PRODUCTO,
           CANTIDAD:actualizarCantidad,

@@ -1,55 +1,56 @@
-import { insertDetalleVenta, getDetalleVentas, getDetalleVentaById, updateDetalleVenta, deleteDetalleVenta } from "../services/registroDetalleVentaService.js";
-import { handleHttp } from "../utils/httpHandlers.js";
+import { insertDetalleVenta, getDetalleVentas, getDetalleVentaById, updateDetalleVenta, deleteDetalleVenta } from "../services/registroDetalleVenta.services.js";
 
-const getDetalleVenta = async (req, res) => {
+const getDetalleVentaId = async (req, res) => {
   try {
     const { id } = req.params;
     const detalleVenta = await getDetalleVentaById(id);
-    const data = detalleVenta ? detalleVenta : "NOT_FOUND";
-    res.send(data);
+    if (!detalleVenta) {
+      return res.status(404).json({ error: "NOT_FOUND" });
+    }
+    res.json(detalleVenta);
   } catch (error) {
-    handleHttp(res, "ERROR_GET_DETALLE_VENTA");
+    res.status(500).json({ error: "ERROR_GET_DETALLE_VENTA" });
   }
 };
 
-const getDetalleVentas = async (req, res) => {
+const getDetalleVentasAll = async (req, res) => {
   try {
     const detalleVentas = await getDetalleVentas();
-    res.send(detalleVentas);
+    res.json(detalleVentas);
   } catch (error) {
-    handleHttp(res, "ERROR_GET_DETALLE_VENTAS");
+    res.status(500).json({ error: "ERROR_GET_DETALLE_VENTAS" });
   }
 };
 
-const updateDetalleVenta = async (req, res) => {
+const updateDetalleVentaU = async (req, res) => {
   try {
     const { id } = req.params;
     const newData = req.body;
     const updatedDetalleVenta = await updateDetalleVenta(id, newData);
-    res.send(updatedDetalleVenta);
+    res.json(updatedDetalleVenta);
   } catch (error) {
-    handleHttp(res, "ERROR_UPDATE_DETALLE_VENTA");
+    res.status(500).json({ error: "ERROR_UPDATE_DETALLE_VENTA" });
   }
 };
 
-const insertDetalleVenta = async (req, res) => {
+const insertDetalleVentaN = async (req, res) => {
   try {
     const detalleVentaData = req.body;
     const newDetalleVenta = await insertDetalleVenta(detalleVentaData);
-    res.send(newDetalleVenta);
+    res.status(201).json(newDetalleVenta);
   } catch (error) {
-    handleHttp(res, "ERROR_INSERT_DETALLE_VENTA");
+    res.status(500).json({ error: "ERROR_INSERT_DETALLE_VENTA" });
   }
 };
 
-const deleteDetalleVenta = async (req, res) => {
+const deleteDetalleVentaD = async (req, res) => {
   try {
     const { id } = req.params;
     const deletedDetalleVenta = await deleteDetalleVenta(id);
-    res.send(deletedDetalleVenta);
+    res.json(deletedDetalleVenta);
   } catch (error) {
-    handleHttp(res, "ERROR_DELETE_DETALLE_VENTA");
+    res.status(500).json({ error: "ERROR_DELETE_DETALLE_VENTA" });
   }
 };
 
-export { getDetalleVenta, getDetalleVentas, updateDetalleVenta, insertDetalleVenta, deleteDetalleVenta };
+export { getDetalleVentaId, getDetalleVentasAll, updateDetalleVentaU, insertDetalleVentaN, deleteDetalleVentaD };

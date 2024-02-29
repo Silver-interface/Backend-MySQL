@@ -1,5 +1,5 @@
 import Venta from "../models/ventaModel.js";
-import insertDetalleVenta from "./registroDetalleVenta.services.js"
+import {insertDetalleVenta} from "./registroDetalleVenta.services.js"
 
 const insertVenta = async (ventaData) => {
   try {
