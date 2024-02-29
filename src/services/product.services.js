@@ -30,6 +30,19 @@ const getProductoById = async (id) => {
   }
 };
 
+const getCantidadProductoById = async (id) => {
+  try {
+    const producto = await Producto.findByPk(id);
+    if (!producto) {
+      throw new Error("Producto no encontrado");
+    }
+    const cantidad = producto.STOCK;
+    return cantidad;
+  } catch (error) {
+    throw new Error(`Error al obtener la cantidad del producto: ${error.message}`);
+  }
+};
+
 const updateProducto = async (id, newData) => {
   try {
     const producto = await Producto.findByPk(id);
@@ -56,4 +69,4 @@ const deleteProducto = async (id) => {
   }
 };
 
-export { insertProducto, getProductos, getProductoById, updateProducto, deleteProducto };
+export { insertProducto, getProductos, getProductoById, updateProducto, deleteProducto, getCantidadProductoById };

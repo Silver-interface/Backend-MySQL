@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/sequelize.js";
 import User from "./userModel.js";
+import DetalleVenta from "./detalleVentaModel.js";
 
 const Venta = sequelize.define(
   "venta",
@@ -11,6 +12,14 @@ const Venta = sequelize.define(
       autoIncrement: true,
       allowNull: false,
     },
+    ID_DETALLE_VENTA:{
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: DetalleVenta,
+        key: "ID_DETALLE_VENTA",
+    }
+  },
     ID_USUARIO: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -36,5 +45,6 @@ const Venta = sequelize.define(
 );
 
 Venta.belongsTo(User, { foreignKey: "ID_USUARIO", as: "usuario" });
+Venta.belongsTo(DetalleVenta, { foreignKey: "ID_DETALLE_VENTA", as: "detalleVenta"});
 
 export default Venta;
