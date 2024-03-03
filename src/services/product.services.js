@@ -49,7 +49,13 @@ const updateProducto = async (id, newData) => {
     if (!producto) {
       throw new Error("Producto no encontrado");
     }
-    await producto.update(newData);
+    
+    // Actualizar el stock del producto si newData incluye la propiedad CANTIDAD
+    if (newData.CANTIDAD !== undefined) {
+      producto.STOCK = newData.CANTIDAD;
+    }
+
+    await producto.save();
     return producto;
   } catch (error) {
     throw new Error(`Error al actualizar el producto: ${error.message}`);
