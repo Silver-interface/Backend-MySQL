@@ -22,7 +22,6 @@ const restarCantidadProducto = async (detalleVenta) => {
     } else {
       actualizarCantidad = cantidadProducto - detalleVenta.CANTIDAD;
 
-      // Actualizar el stock del producto en la base de datos
       const producto = {
         ID_PRODUCTO: detalleVenta.ID_PRODUCTO,
         CANTIDAD: actualizarCantidad,
