@@ -50,7 +50,6 @@ const updateProducto = async (id, newData) => {
       throw new Error("Producto no encontrado");
     }
     
-    // Actualizar el stock del producto si newData incluye la propiedad CANTIDAD
     if (newData.CANTIDAD !== undefined) {
       producto.STOCK = newData.CANTIDAD;
     }
