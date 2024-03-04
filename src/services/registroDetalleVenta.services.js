@@ -64,7 +64,7 @@ const obtenerProductosMasVendidos = async () => {
 
     const productosOrdenados = Object.keys(productosVendidos).sort((a, b) => productosVendidos[b] - productosVendidos[a]);
 
-    const productosMasVendidos = productosOrdenados.slice(0, 3).map(Number); // Convertir a números
+    const productosMasVendidos = productosOrdenados.slice(0, 5).map(Number); // Convertir a números
 
     return productosMasVendidos;
   } catch (error) {
