@@ -12,15 +12,16 @@ const insertVenta = async (ventaData) => {
     const correoOptions = {
       from: process.env.EMAIL_FROM,
       to: usuario ? usuario.CORREO : process.env.EMAIL_TO,
-      subject: 'Confirmacion de compra !',
+      subject: 'Confirmacion de compra',
       html: `
-        <h1>Detalles de la compra</h1>
+        <h1>Agradecemos tu confianza</h1>
         <h3>Compra realizada en GeneralSHOP</h3>
-        <p>Numero de factura: ${newVenta.ID_VENTA}</p>
-        <p>Nombre del usuario: ${nombreUsuario}</p>
-        <p>Fecha de venta: ${newVenta.FECHA_VENTA}</p>
-        <p>Total: ${newVenta.TOTAL}$ COP</p>
-        <p>Fecha de entrega: ${newVenta.FECHA_ENTREGA}</p>
+        <p><h5>Numero de factura: </h5> ${newVenta.ID_VENTA}</p>
+        <p><h5>Nombre del usuario: </h5> ${nombreUsuario}</p>
+        <p> </p>
+        <p><h5>Total: ${newVenta.TOTAL}$ COP</p>
+        <p><h5>Fecha de venta: </h5>${newVenta.FECHA_VENTA}</p>
+        <p><h5>Fecha de entrega: </h5>${newVenta.FECHA_ENTREGA}</p>
       `
     };
 
