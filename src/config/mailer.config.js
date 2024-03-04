@@ -1,21 +1,18 @@
 import dotenv from "dotenv";
+import nodemailer from 'nodemailer';
 dotenv.config();
 
-const nodemailer = require('nodemailer');
-
-
-export const transporter = nodemailer.createTransport({
-    host:'smtp.gmail.com',
-    port: 465,
-    secure: true,
-    auth:{
-        user: process.env.SM_USER,
-        pass: process.env.SM_PASS
+const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: process.env.SMTP_PORT,
+    auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASSWORD
     }
-})
+});
 
 transporter.verify().then(()=>{
     console.log("Listo para enviar emails")
-})
+});
 
-module.exports = transporter;
+export default transporter;

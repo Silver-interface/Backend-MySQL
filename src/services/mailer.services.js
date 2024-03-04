@@ -1,9 +1,13 @@
-import transporter  from "../config/mailer.config.js";
+import transporter from "../config/mailer.config.js";
 
-await transporter.sendEmail({
-    from: '"<Generalshop - Confirmacionde Compra>" <<generalshop093@gmail.com>>',
-    to: 'andresdavid1313@gmail.com',
-    subject: 'Confirmacion de compra ✔',
-    text: 'Hello world?',
-    html: '<b>Hello world?</b>'
-})
+const enviarCorreo = async (correoOptions) => {
+  try {
+    await transporter.sendMail(correoOptions);
+    console.log('Correo electrónico enviado');
+  } catch (error) {
+    console.error('Error al enviar el correo electrónico:', error);
+    throw error;
+  }
+};
+
+export default enviarCorreo;
