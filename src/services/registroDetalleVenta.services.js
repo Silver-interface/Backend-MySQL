@@ -48,6 +48,34 @@ const insertDetalleVenta = async (detalleVentaData) => {
   }
 };
 
+const obtenerProductosMasVendidos = async () => {
+  try {
+    // Obtener todos los detalles de venta
+    const detallesVentas = await DetalleVenta.findAll();
+
+    // Contar la cantidad vendida de cada producto
+    const productosVendidos = {};
+    detallesVentas.forEach(detalle => {
+      const productoId = detalle.ID_PRODUCTO;
+      if (productosVendidos[productoId]) {
+        productosVendidos[productoId] += detalle.CANTIDAD;
+      } else {
+        productosVendidos[productoId] = detalle.CANTIDAD;
+      }
+    });
+
+    // Ordenar los productos por la cantidad vendida
+    const productosOrdenados = Object.keys(productosVendidos).sort((a, b) => productosVendidos[b] - productosVendidos[a]);
+
+    // Obtener los tres productos más vendidos
+    const productosMasVendidos = productosOrdenados.slice(0, 3).map(Number); // Convertir a números
+
+    return productosMasVendidos;
+  } catch (error) {
+    throw new Error(`Error al obtener los productos más vendidos: ${error.message}`);
+  }
+};
+
 const getDetalleVentas = async () => {
   try {
     const detalleVentas = await DetalleVenta.findAll();
@@ -95,4 +123,4 @@ const deleteDetalleVenta = async (id) => {
   }
 };
 
-export { insertDetalleVenta, getDetalleVentas, getDetalleVentaById, updateDetalleVenta, deleteDetalleVenta, restarCantidadProducto };
+export { insertDetalleVenta, getDetalleVentas, getDetalleVentaById, updateDetalleVenta, deleteDetalleVenta, restarCantidadProducto, obtenerProductosMasVendidos };

@@ -1,4 +1,6 @@
-import { insertDetalleVenta, getDetalleVentas, getDetalleVentaById, updateDetalleVenta, deleteDetalleVenta } from "../services/registroDetalleVenta.services.js";
+// registroDetalleVentaController.js
+
+import { insertDetalleVenta, getDetalleVentas, getDetalleVentaById, updateDetalleVenta, deleteDetalleVenta, obtenerProductosMasVendidos } from "../services/registroDetalleVenta.services.js";
 
 const getDetalleVentaId = async (req, res) => {
   try {
@@ -53,4 +55,14 @@ const deleteDetalleVentaD = async (req, res) => {
   }
 };
 
-export { getDetalleVentaId, getDetalleVentasAll, updateDetalleVentaU, insertDetalleVentaN, deleteDetalleVentaD };
+
+const obtenerProductosMasVendidosController = async (req, res) => {
+  try {
+    const productosMasVendidos = await obtenerProductosMasVendidos();
+    res.json(productosMasVendidos);
+  } catch (error) {
+    res.status(500).json({ error: "ERROR_GET_PRODUCTOS_MAS_VENDIDOS" });
+  }
+};
+
+export { getDetalleVentaId, getDetalleVentasAll, updateDetalleVentaU, insertDetalleVentaN, deleteDetalleVentaD, obtenerProductosMasVendidosController };
