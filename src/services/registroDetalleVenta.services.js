@@ -50,10 +50,8 @@ const insertDetalleVenta = async (detalleVentaData) => {
 
 const obtenerProductosMasVendidos = async () => {
   try {
-    // Obtener todos los detalles de venta
     const detallesVentas = await DetalleVenta.findAll();
 
-    // Contar la cantidad vendida de cada producto
     const productosVendidos = {};
     detallesVentas.forEach(detalle => {
       const productoId = detalle.ID_PRODUCTO;
@@ -64,10 +62,8 @@ const obtenerProductosMasVendidos = async () => {
       }
     });
 
-    // Ordenar los productos por la cantidad vendida
     const productosOrdenados = Object.keys(productosVendidos).sort((a, b) => productosVendidos[b] - productosVendidos[a]);
 
-    // Obtener los tres productos más vendidos
     const productosMasVendidos = productosOrdenados.slice(0, 3).map(Number); // Convertir a números
 
     return productosMasVendidos;
