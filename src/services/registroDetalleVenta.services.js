@@ -38,13 +38,17 @@ const restarCantidadProducto = async (detalleVenta) => {
   }
 };
 
-const insertDetalleVenta = async (detalleVentaData) => {
+const insertDetalleVenta = async (listaDetalleVenta) => {
   try {
-    await restarCantidadProducto(detalleVentaData);
-    const newDetalleVenta = await DetalleVenta.create(detalleVentaData);
-    return newDetalleVenta;
+    const detalleVentas = [];
+    for (const detalleVentaData of listaDetalleVenta) {
+      await restarCantidadProducto(detalleVentaData);
+      const newDetalleVenta = await DetalleVenta.create(detalleVentaData);
+      detalleVentas.push(newDetalleVenta);
+    }
+    return detalleVentas;
   } catch (error) {
-    throw new Error(`Error al insertar la Detalle de la Venta: ${error.message}`);
+    throw new Error(`Error al insertar los detalles de la venta: ${error.message}`);
   }
 };
 

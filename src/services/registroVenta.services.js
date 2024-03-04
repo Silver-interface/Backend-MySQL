@@ -1,31 +1,72 @@
 import Venta from "../models/ventaModel.js";
-import User from "../models/userModel.js";
 import enviarCorreo from "./mailer.services.js";
 
-const insertVenta = async (ventaData) => {
+const enviarCorreoElectronico = async (ventaData, newVenta) => {
   try {
-    const newVenta = await Venta.create(ventaData);
-
-    const usuario = await User.findByPk(newVenta.ID_USUARIO);
-    const nombreUsuario = usuario ? `${usuario.NOMBRE_USUARIO} ${usuario.APELLIDO_USUARIO}` : 'Usuario desconocido';
-
+    const emailContent = `
+      <h1>Agradecemos tu confianza</h1>
+      <h3>Compra realizada en GeneralSHOP</h3>
+      <p><h5>Numero de factura: </h5> ${newVenta.ID_VENTA}</p>
+      <p><h5>Nombre: </h5> ${ventaData.name}</p>
+      <p><h5>Apellido: </h5> ${ventaData.lastName}</p>
+      <p><h5>Email: </h5> ${ventaData.email}</p>
+      <p><h5>Dirección: </h5> ${ventaData.address}</p>
+      <p><h5>Tipo de ID: </h5> ${ventaData.IdType}</p>
+      <p><h5>Número de teléfono: </h5> ${ventaData.phoneNumber}</p>
+      <p><h5>Carrito de compras:</h5></p>
+      <ul style="list-style-type: none; padding: 0;"> <!-- Estilos para quitar los puntos de la lista y eliminar el padding -->
+        ${ventaData.cart.map(item => `
+          <li style="margin-bottom: 20px; border-bottom: 1px solid #ccc;"> <!-- Estilos para agregar un margen inferior y una línea divisoria -->
+            <p><h5>ID DEL PRODUCTO:</h5> ${item.ID_PRODUCTO}</p> <!-- Aplicamos el estilo h5 al texto -->
+            <p><h5>NOMBRE_PRODUCTO:</h5> ${item.NOMBRE_PRODUCTO}</p>
+            <p><h5>TALLA:</h5> ${item.TALLA}</p>
+            <p><h5>CANTIDAD:</h5> ${item.CANTIDAD}</p>
+            <p><h5>PRECIO:</h5> $${item.PRECIO}COP</p>
+            <img src="${item.IMAGEN}" alt="Imagen del producto" style="max-width: 200px;"> <!-- Aplicamos el tamaño máximo de la imagen -->
+          </li>
+        `).join('')}
+      </ul>
+    `;
     const correoOptions = {
       from: process.env.EMAIL_FROM,
-      to: usuario ? usuario.CORREO : process.env.EMAIL_TO,
+      to: ventaData.email,
       subject: 'Confirmacion de compra',
-      html: `
-        <h1>Agradecemos tu confianza</h1>
-        <h3>Compra realizada en GeneralSHOP</h3>
-        <p><h5>Numero de factura: </h5> ${newVenta.ID_VENTA}</p>
-        <p><h5>Nombre del usuario: </h5> ${nombreUsuario}</p>
-        <p> </p>
-        <p><h5>Total: ${newVenta.TOTAL}$ COP</p>
-        <p><h5>Fecha de venta: </h5>${newVenta.FECHA_VENTA}</p>
-        <p><h5>Fecha de entrega: </h5>${newVenta.FECHA_ENTREGA}</p>
-      `
+      html: emailContent
     };
 
     await enviarCorreo(correoOptions);
+
+    console.log("Correo electrónico enviado correctamente");
+  } catch (error) {
+    throw new Error(`Error al enviar el correo electrónico: ${error.message}`);
+  }
+};
+
+const calcularTotal = (cart) => {
+  let total = 0;
+  for (const item of cart) {
+    total += item.PRECIO * item.CANTIDAD;
+  }
+
+  return total;
+};
+
+const calcularFechaEntrega = (fechaActual) => {
+  const fechaEntrega = new Date(fechaActual);
+  fechaEntrega.setDate(fechaEntrega.getDate() + 3);
+  return fechaEntrega;
+};
+
+const insertVenta = async (ventaData) => {
+  try {
+    const ventaPrincipalData = {
+      ID_USUARIO: ventaData.ID_USUARIO,
+      FECHA_VENTA: new Date(),
+      TOTAL: calcularTotal(ventaData.cart),
+      FECHA_ENTREGA: calcularFechaEntrega(new Date()),
+    };
+    const newVenta = await Venta.create(ventaPrincipalData);
+    await enviarCorreoElectronico(ventaData, newVenta);
 
     return newVenta;
   } catch (error) {
